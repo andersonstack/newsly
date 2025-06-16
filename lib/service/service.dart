@@ -9,9 +9,11 @@ class DataService {
 
   const DataService({this.objects = const []});
 
-  Future<void> fetchNewsPappers() async {
+  Future<void> fetchNewsPappers({int page = 1, int pageSize = 5}) async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/everything?q=technology&apiKey=$_apiKey'),
+      Uri.parse(
+        '$_baseUrl/top-headlines?category=technology&page=$page&pageSize=$pageSize&apiKey=$_apiKey',
+      ),
     );
 
     if (response.statusCode == 200) {
