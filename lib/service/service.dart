@@ -53,11 +53,12 @@ class DataService {
 Future<void> fetchArticles({
   required ValueNotifier<List<Article>> target,
   String filter = '',
+  int pageSize = 5,
 }) async {
   try {
     final data = await DataService().loadArticles(
       page: 1,
-      pageSize: 5,
+      pageSize: pageSize,
       filter: filter,
     );
     target.value = data;

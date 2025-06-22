@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../interface/article.dart';
 import '../components/card.dart';
+import '../service/service.dart';
 
 class Home extends HookWidget {
   final ValueNotifier<List<Article>> articlesTechnology;
@@ -14,15 +15,31 @@ class Home extends HookWidget {
     final isMobile = screenWidth <= 600;
     final screenHeight = MediaQuery.of(context).size.height;
     final currentIndex = useState(0);
+    final searchNotice = useState<String>("");
 
-    // Agora os artigos já são Article
     final List<Article> articles = useListenable(articlesTechnology).value;
+
+    void filterArticles(String search) {
+      if (search.isEmpty) {
+        fetchArticles(target: articlesTechnology, pageSize: 100);
+      }
+    }
+
+    final List<Article> filteredArticles = searchNotice.value.isEmpty
+        ? articles
+        : articles
+              .where(
+                (article) => article.titleArticle.toLowerCase().contains(
+                  searchNotice.value.toLowerCase(),
+                ),
+              )
+              .toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Today's News")),
       body: Column(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
@@ -30,20 +47,34 @@ class Home extends HookWidget {
                 suffixIcon: Icon(Icons.search),
                 hintMaxLines: 2,
               ),
+              onChanged: (value) {
+                searchNotice.value = value;
+                filterArticles(value);
+              },
             ),
           ),
-          articles.isEmpty
-              ? CircularProgressIndicator()
-              : isMobile
-              ? HomeMobile(
-                  articles: articles,
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                )
-              : HomeDesktop(
-                  articles: articles,
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
+          searchNotice.value.isEmpty
+              ? articles.isEmpty
+                    ? CircularProgressIndicator()
+                    : isMobile
+                    ? HomeMobile(
+                        articles: articles,
+                        screenHeight: screenHeight,
+                        screenWidth: screenWidth,
+                      )
+                    : HomeDesktop(
+                        articles: articles,
+                        screenHeight: screenHeight,
+                        screenWidth: screenWidth,
+                      )
+              : Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: filteredArticles.length,
+                    itemBuilder: (context, index) {
+                      return CardArticle(article: filteredArticles[index]);
+                    },
+                  ),
                 ),
         ],
       ),
