@@ -15,21 +15,21 @@ extension AppColor on GetColor {
   Color get color {
     switch (this) {
       case GetColor.description:
-        return Color(0xFF000000);
+        return Color(0xFF4A4A4A); // cinza escuro para descrições
       case GetColor.content:
-        return Color.fromARGB(255, 94, 94, 94);
+        return Color(0xFF6A6A6A); // cinza médio para corpo do texto
       case GetColor.text:
-        return Color(0xFF000000);
+        return Color(0xFF1C1C1C); // texto principal, quase preto
       case GetColor.tittle:
-        return Color.fromARGB(255, 23, 81, 129);
+        return Color(0xFF000000); // títulos bem visíveis
       case GetColor.subtitle:
-        return Color(0xFFF9FF38);
+        return Color(0xFF0077CC); // azul para subtítulos, link-like
       case GetColor.emphasis:
-        return Color(0xFFF20C36);
+        return Color(0xFFD7263D); // vermelho mais sóbrio para ênfases
       case GetColor.background:
-        return Color.fromRGBO(255, 250, 250, 1);
+        return Color(0xFFF4F4F4); // fundo claro padrão
       case GetColor.foreBackGround:
-        return Color(0xFF590E0B);
+        return Color(0xFFFFFFFF); // branco para inputs e caixas
     }
   }
 }
