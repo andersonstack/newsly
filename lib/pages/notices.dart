@@ -13,9 +13,9 @@ class NoticesPages extends HookWidget {
   Widget build(BuildContext context) {
     final List<String> filters = [
       'Technology',
-      'Of the World',
-      'Movies',
-      'Series',
+      'Business',
+      'Science',
+      'Entertainment',
     ];
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 781;
