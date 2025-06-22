@@ -8,10 +8,19 @@ class Home extends HookWidget {
 
   const Home({super.key, required this.articlesTechnology});
 
+  void screen(width, height) {
+    print(width);
+    print(height);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    // final isTablet = screenWidth <= 940;
+    final isMobile = screenWidth <= 600;
     final screenHeight = MediaQuery.of(context).size.height;
     final currentIndex = useState(0);
+    screen(screenWidth, screenHeight);
 
     final List<Map<String, dynamic>> articlesMap = articlesTechnology.value;
     final List<Article> articles = articlesMap
@@ -32,56 +41,17 @@ class Home extends HookWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  child: Image.network(
-                    articles[0].urlToImage,
-                    fit: BoxFit.cover,
-                  ),
+          isMobile
+              ? HomeMobile(
+                  articles: articles,
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                )
+              : HomeDesktop(
+                  articles: articles,
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
                 ),
-
-                // Lista de artigos
-                Positioned(
-                  top: screenHeight * 0.32,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    itemCount: articles.length,
-                    itemBuilder: (context, index) {
-                      if (index != 0) {
-                        return CardArticle(article: articles[index]);
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-
-                // Texto sobreposto em destaque
-                Positioned(
-                  top: screenHeight * 0.27,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: screenHeight * 0.05,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Color(0xFF0077CC)),
-                    child: Text(
-                      "Follow the latest technology news",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -97,6 +67,137 @@ class Home extends HookWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.list_sharp),
             label: "Notices",
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeMobile extends HookWidget {
+  final List<Article> articles;
+  final double screenHeight;
+  final double screenWidth;
+
+  const HomeMobile({
+    super.key,
+    required this.articles,
+    required this.screenHeight,
+    required this.screenWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Stack(
+        children: [
+          Positioned(
+            child: Image.network(articles[0].urlToImage, fit: BoxFit.cover),
+          ),
+
+          // Lista de artigos
+          Positioned(
+            top: screenHeight * 0.32,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                if (index != 0) {
+                  return CardArticle(article: articles[index]);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+
+          // Texto sobreposto em destaque
+          Positioned(
+            top: screenHeight * 0.27,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: screenHeight * 0.05,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: Color(0xFF0077CC)),
+              child: Text(
+                "Follow the latest technology news",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeDesktop extends HookWidget {
+  final List<Article> articles;
+  final double screenHeight;
+  final double screenWidth;
+
+  const HomeDesktop({
+    super.key,
+    required this.articles,
+    required this.screenHeight,
+    required this.screenWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Imagem em destaque
+          SizedBox(
+            width: screenWidth * 0.5,
+            height: double.infinity,
+            child: Image.network(articles[0].urlToImage, fit: BoxFit.cover),
+          ),
+
+          // Coluna de título + lista
+          Expanded(
+            child: Column(
+              children: [
+                // Texto de destaque
+                Container(
+                  height: screenHeight * 0.07,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: const Color(0xFF0077CC),
+                  child: Text(
+                    "Follow the latest technology news",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                // Lista de artigos
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: articles.length,
+                    itemBuilder: (context, index) {
+                      if (index != 0) {
+                        return CardArticle(article: articles[index]);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
