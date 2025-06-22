@@ -14,28 +14,37 @@ void main() {
 class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<List<Article>> articles = ValueNotifier([]);
+    final articlesHome = useState<List<Article>>([]);
+    final articlesNotices = useState<List<Article>>([]);
+
+    Future<void> fetchArticles({
+      required ValueNotifier<List<Article>> target,
+      String filter = '',
+    }) async {
+      try {
+        final data = await DataService().loadArticles(
+          page: 1,
+          pageSize: 5,
+          filter: filter,
+        );
+        target.value = data;
+      } catch (e) {
+        print('Erro ao carregar artigos: $e');
+      }
+    }
 
     useEffect(() {
-      Future<void> fetchData() async {
-        try {
-          final data = await DataService().loadArticles(page: 1);
-          articles.value = data;
-        } catch (e) {
-          // ignore: avoid_print
-          print("Erro ao carregar artigos iniciais: $e");
-        }
-      }
-
-      fetchData();
-    });
+      fetchArticles(target: articlesHome, filter: "technology");
+      fetchArticles(target: articlesNotices);
+      return null;
+    }, []);
 
     return MaterialApp(
       theme: MyTheme().themeDefault(),
       initialRoute: '/home',
       routes: {
-        '/home': (context) => Home(articlesTechnology: articles),
-        '/notices': (context) => NoticesPages(articles: articles),
+        '/home': (context) => Home(articlesTechnology: articlesHome),
+        '/notices': (context) => NoticesPages(articles: articlesNotices),
       },
     );
   }
