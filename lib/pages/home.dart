@@ -10,8 +10,15 @@ class Home extends HookWidget {
       appBar: AppBar(title: const Text("Today's News")),
       body: Column(
         children: [
-          const TextField(
-            decoration: InputDecoration(hintText: "Search Notice"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: const TextField(
+              decoration: InputDecoration(
+                hintText: "Search Notice",
+                suffixIcon: Icon(Icons.search),
+                hintMaxLines: 2,
+              ),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
