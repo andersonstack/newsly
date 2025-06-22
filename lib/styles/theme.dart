@@ -81,6 +81,24 @@ class MyTheme {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return Color(0xFF0077CC);
+            } else {
+              return Color(0xFF0077CC);
+            }
+          }),
+          foregroundColor: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return GetColor.foreBackGround.color;
+            } else {
+              return GetColor.foreBackGround.color;
+            }
+          }),
+        ), //Color(0xFF0077CC)
+      ),
     );
   }
 
