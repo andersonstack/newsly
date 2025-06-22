@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../components/card.dart';
 import '../interface/article.dart';
 import '../components/text_btn.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class NoticesPages extends StatelessWidget {
-  final ValueNotifier<List<Map<String, dynamic>>> articles;
+class NoticesPages extends HookWidget {
+  final ValueNotifier<List<Article>> articles;
 
   const NoticesPages({super.key, required this.articles});
 
@@ -36,9 +37,7 @@ class NoticesPages extends StatelessWidget {
                       ? ListView.builder(
                           itemCount: articles.value.length,
                           itemBuilder: (context, index) {
-                            final article = Article.fromJson(
-                              articles.value[index],
-                            );
+                            final article = articles.value[index];
                             return CardArticle(article: article);
                           },
                         )
@@ -53,9 +52,7 @@ class NoticesPages extends StatelessWidget {
                               ),
                           itemCount: articles.value.length,
                           itemBuilder: (context, index) {
-                            final article = Article.fromJson(
-                              articles.value[index],
-                            );
+                            final article = articles.value[index];
                             return CardArticle(article: article);
                           },
                         )

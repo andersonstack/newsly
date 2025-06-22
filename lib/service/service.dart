@@ -29,7 +29,11 @@ class DataService {
     }
   }
 
-  Future<List<Article>> loadArticles({String filter = "technology"}) async {
+  Future<List<Article>> loadArticles({
+    int page = 1,
+    int pageSize = 5,
+    String filter = "technology",
+  }) async {
     final List<Map<String, dynamic>> articlesData = await fetchNewsPappers(
       filter: filter,
     );

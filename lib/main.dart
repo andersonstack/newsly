@@ -4,6 +4,7 @@ import './service/service.dart';
 import './styles/theme.dart';
 import './pages/home.dart';
 import './pages/notices.dart';
+import './interface/article.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,19 +14,16 @@ void main() {
 class MyApp extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final articles = useState<List<Map<String, dynamic>>>([]);
-    final isLoading = useState(true);
-    final hasError = useState<String?>(null);
+    ValueNotifier<List<Article>> articles = ValueNotifier([]);
 
     useEffect(() {
       Future<void> fetchData() async {
         try {
-          final data = await DataService().fetchNewsPappers();
+          final data = await DataService().loadArticles(page: 1);
           articles.value = data;
         } catch (e) {
-          hasError.value = e.toString();
-        } finally {
-          isLoading.value = false;
+          // ignore: avoid_print
+          print("Erro ao carregar artigos iniciais: $e");
         }
       }
 
@@ -36,7 +34,7 @@ class MyApp extends HookWidget {
       theme: MyTheme().themeDefault(),
       initialRoute: '/home',
       routes: {
-        '/home': (context) => Home(),
+        '/home': (context) => Home(articlesTechnology: articles),
         '/notices': (context) => NoticesPages(articles: articles),
       },
     );
