@@ -12,10 +12,11 @@ class DataService {
   Future<List<Map<String, dynamic>>> fetchNewsPappers({
     int page = 1,
     int pageSize = 5,
+    String filter = "technology",
   }) async {
     final response = await http.get(
       Uri.parse(
-        '$_baseUrl/top-headlines?category=technology&page=$page&pageSize=$pageSize&apiKey=$_apiKey',
+        '$_baseUrl/top-headlines?category=$filter&page=$page&pageSize=$pageSize&apiKey=$_apiKey',
       ),
     );
 
