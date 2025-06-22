@@ -50,8 +50,9 @@ class CardArticle extends HookWidget {
               ),
 
             // Editora e data
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
               children: [
                 Text(
                   article.editora,
@@ -83,6 +84,7 @@ class CardArticle extends HookWidget {
               overflow: isWide ? TextOverflow.visible : TextOverflow.ellipsis,
             ),
 
+            SizedBox(height: 15),
             // Botão
             Align(
               alignment: Alignment.centerLeft,
