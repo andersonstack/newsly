@@ -16,7 +16,7 @@ class Home extends HookWidget {
     final currentIndex = useState(0);
 
     // Agora os artigos já são Article
-    final List<Article> articles = articlesTechnology.value;
+    final List<Article> articles = useListenable(articlesTechnology).value;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Today's News")),
@@ -32,7 +32,9 @@ class Home extends HookWidget {
               ),
             ),
           ),
-          isMobile
+          articles.isEmpty
+              ? CircularProgressIndicator()
+              : isMobile
               ? HomeMobile(
                   articles: articles,
                   screenHeight: screenHeight,

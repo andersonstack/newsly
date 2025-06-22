@@ -19,6 +19,7 @@ class NoticesPages extends HookWidget {
     ];
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 781;
+    final currentArticles = useListenable(articles).value;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Today's News")),
@@ -32,7 +33,7 @@ class NoticesPages extends HookWidget {
             ),
           ),
           Expanded(
-            child: articles.value.isNotEmpty
+            child: currentArticles.isNotEmpty
                 ? isMobile
                       ? ListView.builder(
                           itemCount: articles.value.length,
@@ -56,7 +57,7 @@ class NoticesPages extends HookWidget {
                             return CardArticle(article: article);
                           },
                         )
-                : const Center(child: Text("Sem notícias")),
+                : const LinearProgressIndicator(),
           ),
         ],
       ),
