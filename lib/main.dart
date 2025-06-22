@@ -28,7 +28,7 @@ class MyApp extends HookWidget {
       }
 
       fetchData();
-    }, []);
+    });
 
     return MaterialApp(
       theme: MyTheme().themeDefault(),
