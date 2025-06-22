@@ -9,7 +9,10 @@ class DataService {
 
   const DataService({this.objects = const []});
 
-  Future<void> fetchNewsPappers({int page = 1, int pageSize = 5}) async {
+  Future<List<Map<String, dynamic>>> fetchNewsPappers({
+    int page = 1,
+    int pageSize = 5,
+  }) async {
     final response = await http.get(
       Uri.parse(
         '$_baseUrl/top-headlines?category=technology&page=$page&pageSize=$pageSize&apiKey=$_apiKey',
@@ -18,8 +21,9 @@ class DataService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // ignore: avoid_print
-      print(data['totalResults']);
+      return List<Map<String, dynamic>>.from(data['articles']);
+    } else {
+      throw Exception("Erro ao buscar notícias: ${response.statusCode}");
     }
   }
 }
