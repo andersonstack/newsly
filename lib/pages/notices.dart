@@ -29,6 +29,7 @@ class NoticesPages extends HookWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              spacing: 12,
               children: filters.map((btn) => TextBtn(text: btn)).toList(),
             ),
           ),

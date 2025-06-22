@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../interface/article.dart';
+import 'package:flutter/material.dart';
 
 class DataService {
   static final String _apiKey = '7c5127495be040c4b00f56851450989f';
@@ -46,5 +47,22 @@ class DataService {
       filter: filter,
     );
     return articlesData.map((json) => Article.fromJson(json)).toList();
+  }
+}
+
+Future<void> fetchArticles({
+  required ValueNotifier<List<Article>> target,
+  String filter = '',
+}) async {
+  try {
+    final data = await DataService().loadArticles(
+      page: 1,
+      pageSize: 5,
+      filter: filter,
+    );
+    target.value = data;
+  } catch (e) {
+    // ignore: avoid_print
+    print('Erro ao carregar artigos: $e');
   }
 }

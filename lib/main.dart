@@ -17,22 +17,6 @@ class MyApp extends HookWidget {
     final articlesHome = useState<List<Article>>([]);
     final articlesNotices = useState<List<Article>>([]);
 
-    Future<void> fetchArticles({
-      required ValueNotifier<List<Article>> target,
-      String filter = '',
-    }) async {
-      try {
-        final data = await DataService().loadArticles(
-          page: 1,
-          pageSize: 5,
-          filter: filter,
-        );
-        target.value = data;
-      } catch (e) {
-        print('Erro ao carregar artigos: $e');
-      }
-    }
-
     useEffect(() {
       fetchArticles(target: articlesHome, filter: "technology");
       fetchArticles(target: articlesNotices);
