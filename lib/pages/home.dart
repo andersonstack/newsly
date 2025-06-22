@@ -20,8 +20,14 @@ class Home extends HookWidget {
     final List<Article> articles = useListenable(articlesTechnology).value;
 
     void filterArticles(String search) {
-      if (search.isEmpty) {
+      if (search.isNotEmpty) {
         fetchArticles(target: articlesTechnology, pageSize: 100);
+      } else {
+        fetchArticles(
+          target: articlesTechnology,
+          pageSize: 10,
+          filter: "technology",
+        );
       }
     }
 
@@ -50,6 +56,10 @@ class Home extends HookWidget {
               onChanged: (value) {
                 searchNotice.value = value;
                 filterArticles(value);
+
+                if (searchNotice.value.isEmpty) {
+                  filterArticles(value);
+                }
               },
             ),
           ),
