@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../interface/article.dart';
 
 class DataService {
   static final String _apiKey = '7c5127495be040c4b00f56851450989f';
@@ -26,5 +27,12 @@ class DataService {
     } else {
       throw Exception("Erro ao buscar notícias: ${response.statusCode}");
     }
+  }
+
+  Future<List<Article>> loadArticles({String filter = "technology"}) async {
+    final List<Map<String, dynamic>> articlesData = await fetchNewsPappers(
+      filter: filter,
+    );
+    return articlesData.map((json) => Article.fromJson(json)).toList();
   }
 }
