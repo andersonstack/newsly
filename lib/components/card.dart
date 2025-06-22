@@ -3,15 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../interface/article.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// final String editora;
-// final String titleArticle;
-// final String autor;
-// final String description;
-// final String urlToNotice;
-// final String urlToImage;
-// final String datePublished;
-// final String content;
-
 class CardArticle extends HookWidget {
   final Article article;
 
@@ -26,45 +17,83 @@ class CardArticle extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        spacing: 10,
-        children: [
-          Text(
-            article.titleArticle,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          Image.network(article.urlToImage),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                article.editora,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              Text(
-                article.datePublished,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-            ],
-          ),
-          Text(article.autor, style: Theme.of(context).textTheme.labelLarge),
-          Text(
-            article.description,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Text(article.content, style: Theme.of(context).textTheme.bodySmall),
-          ElevatedButton.icon(
-            onPressed: () => _launchURL(article.urlToNotice),
-            icon: const Icon(Icons.link),
-            label: Text(
-              'Ler notícia completa',
-              style: Theme.of(context).textTheme.labelSmall,
+    final screenSize = MediaQuery.of(context).size;
+    final isWide = screenSize.width >= 781;
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Título
+            Text(
+              article.titleArticle,
+              style: Theme.of(context).textTheme.titleMedium,
+              maxLines: isWide ? null : 2,
+              overflow: isWide ? TextOverflow.visible : TextOverflow.ellipsis,
             ),
-          ),
-        ],
+
+            // Imagem
+            if (article.urlToImage.isNotEmpty)
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.network(
+                  article.urlToImage,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+              ),
+
+            // Editora e data
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  article.editora,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                Text(
+                  article.datePublished,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ],
+            ),
+
+            // Autor
+            Text(article.autor, style: Theme.of(context).textTheme.labelLarge),
+
+            // Descrição
+            Text(
+              article.description,
+              style: Theme.of(context).textTheme.bodyMedium,
+              maxLines: isWide ? null : 3,
+              overflow: isWide ? TextOverflow.visible : TextOverflow.ellipsis,
+            ),
+
+            // Conteúdo
+            Text(
+              article.content,
+              style: Theme.of(context).textTheme.bodySmall,
+              maxLines: isWide ? null : 4,
+              overflow: isWide ? TextOverflow.visible : TextOverflow.ellipsis,
+            ),
+
+            // Botão
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ElevatedButton.icon(
+                onPressed: () => _launchURL(article.urlToNotice),
+                icon: const Icon(Icons.link),
+                label: const Text("Ler notícia completa"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

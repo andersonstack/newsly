@@ -9,16 +9,35 @@ class NoticesPages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 781;
+
     return Scaffold(
       appBar: AppBar(title: const Text("Today's News")),
       body: articles.value.isNotEmpty
-          ? ListView.builder(
-              itemCount: articles.value.length,
-              itemBuilder: (context, index) {
-                final article = Article.fromJson(articles.value[index]);
-                return CardArticle(article: article);
-              },
-            )
+          ? isMobile
+                ? ListView.builder(
+                    itemCount: articles.value.length,
+                    itemBuilder: (context, index) {
+                      final article = Article.fromJson(articles.value[index]);
+                      return CardArticle(article: article);
+                    },
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 3 / 3,
+                        ),
+                    itemCount: articles.value.length,
+                    itemBuilder: (context, index) {
+                      final article = Article.fromJson(articles.value[index]);
+                      return CardArticle(article: article);
+                    },
+                  )
           : const Center(child: Text("Sem notícias")),
     );
   }
