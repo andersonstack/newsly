@@ -27,10 +27,14 @@ class NoticesPages extends HookWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              spacing: 12,
-              children: filters.map((btn) => TextBtn(text: btn)).toList(),
+            child: SizedBox(
+              height: 40,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: filters.length,
+                itemBuilder: (context, index) => TextBtn(text: filters[index]),
+                separatorBuilder: (context, index) => SizedBox(width: 20),
+              ),
             ),
           ),
           Expanded(
