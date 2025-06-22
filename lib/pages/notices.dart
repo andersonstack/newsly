@@ -3,6 +3,7 @@ import '../components/card.dart';
 import '../interface/article.dart';
 import '../components/text_btn.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import '../service/service.dart';
 
 class NoticesPages extends HookWidget {
   final ValueNotifier<List<Article>> articles;
@@ -20,6 +21,11 @@ class NoticesPages extends HookWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 781;
     final currentArticles = useListenable(articles).value;
+    final selectedFilter = useState<String>("");
+    void filterArticles(String filter) {
+      selectedFilter.value = filter.toLowerCase();
+      fetchArticles(target: articles, filter: selectedFilter.value);
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text("Today's News")),
@@ -32,7 +38,13 @@ class NoticesPages extends HookWidget {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: filters.length,
-                itemBuilder: (context, index) => TextBtn(text: filters[index]),
+                itemBuilder: (context, index) {
+                  final filter = filters[index];
+                  return TextBtn(
+                    text: filter,
+                    function: () => filterArticles(filter),
+                  );
+                },
                 separatorBuilder: (context, index) => SizedBox(width: 20),
               ),
             ),
