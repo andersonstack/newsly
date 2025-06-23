@@ -2,10 +2,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../interface/article.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DataService {
-  static final String _apiKey = '7c5127495be040c4b00f56851450989f';
-
   final List<Map<String, Object>> objects;
 
   const DataService({this.objects = const []});
@@ -16,10 +15,11 @@ class DataService {
     String filter = "",
     String country = "us",
   }) async {
+    var apiKey = dotenv.env['API_KEY'] ?? "";
     final queryParams = {
       'page': '$page',
       'pageSize': '$pageSize',
-      'apiKey': _apiKey,
+      'apiKey': apiKey,
       if (filter.isNotEmpty) 'category': filter,
       if (filter.isEmpty) 'country': country,
     };

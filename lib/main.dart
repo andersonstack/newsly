@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import './service/service.dart';
 import './styles/theme.dart';
@@ -6,7 +7,8 @@ import './pages/home.dart';
 import './pages/notices.dart';
 import './interface/article.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
