@@ -21,7 +21,7 @@ class MyApp extends HookWidget {
 
     useEffect(() {
       fetchArticles(target: articlesHome, filter: "technology");
-      fetchArticles(target: articlesNotices);
+      fetchArticles(target: articlesNotices, pageSize: 10);
       return null;
     }, []);
 
