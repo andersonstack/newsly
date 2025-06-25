@@ -54,10 +54,11 @@ Future<void> fetchArticles({
   required ValueNotifier<List<Article>> target,
   String filter = '',
   int pageSize = 5,
+  int page = 1,
 }) async {
   try {
     final data = await DataService().loadArticles(
-      page: 1,
+      page: page,
       pageSize: pageSize,
       filter: filter,
     );
